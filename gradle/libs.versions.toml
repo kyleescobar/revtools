@@ -1,0 +1,24 @@
+[versions]
+kotlin = "_"
+clikt = "_"
+tinylog = "_"
+asm = "_"
+jansi = "_"
+bouncycastle = "_"
+json = "_"
+
+[libraries]
+clikt = { group = "com.github.ajalt.clikt", name = "clikt", version.ref = "clikt" }
+tinylog-api = { module = "org.tinylog:tinylog-api-kotlin", version.ref = "tinylog" }
+tinylog-impl = { module = "org.tinylog:tinylog-impl", version.ref = "tinylog" }
+asm = { module = "org.ow2.asm:asm", version.ref = "asm" }
+asm-commons = { module = "org.ow2.asm:asm-commons", version.ref = "asm" }
+asm-util = { module = "org.ow2.asm:asm-util", version.ref = "asm" }
+asm-tree = { module = "org.ow2.asm:asm-tree", version.ref = "asm" }
+jansi = { module = "org.fusesource.jansi:jansi", version.ref = "jansi" }
+bouncycastle-bcprov = { module = "org.bouncycastle:bcprov-jdk15on", version.ref = "bouncycastle" }
+json = { module = "org.json:json", version.ref = "json" }
+
+[bundles]
+tinylog = ["tinylog-api", "tinylog-impl"]
+asm = ["asm", "asm-commons", "asm-util", "asm-tree"]
