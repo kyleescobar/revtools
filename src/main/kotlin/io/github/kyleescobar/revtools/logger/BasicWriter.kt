@@ -28,18 +28,25 @@ class BasicWriter @Suppress("unused") constructor(properties: Map<String?, Strin
         val hasException = logEntry.exception != null && logEntry.level == Level.ERROR
         var ansi: Ansi = Ansi.ansi()
         ansi = ansi.fgCyan().a("[$time] ").reset()
-        ansi = ansi.a("[" + logEntry.getThread().getName() + "] ").reset()
-        ansi = ansi.fgYellow().a("[" + if(hasException) "SEVERE" + "] " else logEntry.getLevel().name + "] ").reset()
-        ansi = ansi.fgMagenta().a("[$clazz] ").reset()
+        ansi = ansi.fgRgb(150, 150, 140).a("[" + logEntry.getThread().getName() + "] ").reset()
         when (logEntry.getLevel()) {
-            org.tinylog.Level.INFO, org.tinylog.Level.OFF -> ansi = ansi.a(message).reset()
-            org.tinylog.Level.WARN -> ansi = ansi.fgBrightYellow().a(message).reset()
-            org.tinylog.Level.ERROR -> ansi = if(hasException) ansi.bgRgb(125, 0, 0).fgDefault().bold().a(" An Exception Occurred: ").reset() else ansi.fgRed().a(message).reset()
-            org.tinylog.Level.DEBUG -> ansi = ansi.fgBrightCyan().a(message).reset()
-            org.tinylog.Level.TRACE -> ansi = ansi.fgBrightBlue().a(message).reset()
+            Level.TRACE -> { ansi = ansi.fgBrightCyan().a("[TRACE] ").reset() }
+            Level.DEBUG -> { ansi = ansi.fgBrightBlue().a("[DEBUG] ").reset() }
+            Level.INFO -> { ansi = ansi.fgRgb(122, 216, 122).a("[INFO] ").reset() }
+            Level.WARN -> { ansi = ansi.fgBrightYellow().a("[WARN] ").reset() }
+            Level.ERROR -> {
+                if(hasException) {
+                    ansi = ansi.bgRgb(125, 50, 50).fgDefault().a("[SEVERE]").reset().fgRed().a(" ")
+                } else {
+                    ansi = ansi.fgRed().a("[ERROR] ").reset()
+                }
+            }
+            else -> return
         }
+        ansi = ansi.fgMagenta().a("[$clazz] ").reset()
+        ansi = ansi.fgDefault().a(message).reset()
         if(hasException) {
-            ansi = ansi.fgBrightBlack().a("\n${logEntry.exception.stackTraceToString()}")
+            ansi = ansi.reset().fgBrightBlack().a("\n${logEntry.exception.stackTraceToString()}")
         }
         System.out.println(ansi)
     }

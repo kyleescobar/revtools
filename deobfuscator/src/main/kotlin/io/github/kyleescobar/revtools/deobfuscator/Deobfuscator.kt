@@ -3,6 +3,7 @@ package io.github.kyleescobar.revtools.deobfuscator
 import io.github.kyleescobar.revtools.asm.tree.ClassPool
 import io.github.kyleescobar.revtools.deobfuscator.transformer.ControlFlowTransformer
 import io.github.kyleescobar.revtools.deobfuscator.transformer.DeadCodeTransformer
+import io.github.kyleescobar.revtools.deobfuscator.transformer.RedundantGotoTransformer
 import io.github.kyleescobar.revtools.deobfuscator.transformer.RuntimeExceptionTransformer
 import org.tinylog.kotlin.Logger
 import java.io.File
@@ -29,6 +30,7 @@ class Deobfuscator(
         register<RuntimeExceptionTransformer>()
         register<DeadCodeTransformer>()
         register<ControlFlowTransformer>()
+        register<RedundantGotoTransformer>()
 
         Logger.info("Registered ${transformers.size} bytecode transformers.")
     }

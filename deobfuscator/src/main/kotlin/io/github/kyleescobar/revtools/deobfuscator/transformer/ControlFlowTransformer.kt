@@ -15,15 +15,6 @@ import org.objectweb.asm.tree.MethodNode
 class ControlFlowTransformer : Transformer {
 
     override fun run(pool: ClassPool) {
-        val cls = pool.findClass("client")!!
-        val method = cls.findMethod("init", "()V")!!
-        val clsAttr = cls.origInfoAttr
-        val methodAttr = method.origInfoAttr
-        println()
 
-        val newMethod = MethodNode()
-        val sorter = LocalVariablesSorter(method.access, method.desc, newMethod)
-        method.accept(sorter)
-        println()
     }
 }
