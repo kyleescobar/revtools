@@ -1,7 +1,6 @@
 package io.github.kyleescobar.revtools.deobfuscator
 
 import io.github.kyleescobar.revtools.asm.tree.ClassPool
-import io.github.kyleescobar.revtools.deobfuscator.asm.build
 import io.github.kyleescobar.revtools.deobfuscator.transformer.ControlFlowTransformer
 import io.github.kyleescobar.revtools.deobfuscator.transformer.DeadCodeTransformer
 import io.github.kyleescobar.revtools.deobfuscator.transformer.RuntimeExceptionTransformer
@@ -47,7 +46,6 @@ class Deobfuscator(
          */
         pool = ClassPool.fromJar(inputJarFile)
         pool.init()
-        pool.build()
         Logger.info("Loaded ${pool.classes.size} classes from input jar into class pool.")
 
         /*

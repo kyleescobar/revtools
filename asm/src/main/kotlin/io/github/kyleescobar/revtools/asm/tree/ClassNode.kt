@@ -36,7 +36,7 @@ var ClassNode.superClass: ClassNode? by nullField()
 val ClassNode.interfaceClasses: HashSet<ClassNode> by field { hashSetOf() }
 val ClassNode.children: HashSet<ClassNode> by field { hashSetOf() }
 
-var ClassNode.origInfoAttr: OrigInfoAttribute by field { OrigInfoAttribute(null, it.name, null) }
+var ClassNode.origInfoAttr: OrigInfoAttribute by field { OrigInfoAttribute(name = it.name) }
 
 val ClassNode.identifier get() = name
 val ClassNode.type get() = Type.getObjectType(name)

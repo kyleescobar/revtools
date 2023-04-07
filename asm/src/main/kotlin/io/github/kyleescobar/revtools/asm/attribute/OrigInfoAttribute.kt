@@ -3,9 +3,10 @@ package io.github.kyleescobar.revtools.asm.attribute
 import org.objectweb.asm.*
 
 class OrigInfoAttribute(
-    var origOwner: String? = null,
-    var origName: String? = null,
-    var origDesc: String? = null,
+    var owner: String = "",
+    var name: String = "",
+    var desc: String = "",
+    var lineNumbers: MutableList<Int> = mutableListOf()
 ) : Attribute("OrigInfo") {
 
     override fun read(
@@ -27,7 +28,17 @@ class OrigInfoAttribute(
         val origDesc = classReader.readUTF8(curOffset, charBuffer)
         curOffset += 2
 
-        return OrigInfoAttribute(origOwner, origName, origDesc)
+        val lineNumberCount = classReader.readUnsignedShort(curOffset)
+        curOffset += 2
+
+        val lineNumbers = mutableListOf<Int>()
+        for(i in 0 until lineNumberCount) {
+            val lineNumber = classReader.readInt(curOffset)
+            curOffset += 4
+            lineNumbers.add(lineNumber)
+        }
+
+        return OrigInfoAttribute(origOwner, origName, origDesc, lineNumbers)
     }
 
     override fun write(
@@ -38,9 +49,13 @@ class OrigInfoAttribute(
         maxLocals: Int
     ): ByteVector {
         val buf = ByteVector()
-        buf.putShort(classWriter.newUTF8(origOwner))
-        buf.putShort(classWriter.newUTF8(origName))
-        buf.putShort(classWriter.newUTF8(origDesc))
+        buf.putShort(classWriter.newUTF8(owner))
+        buf.putShort(classWriter.newUTF8(name))
+        buf.putShort(classWriter.newUTF8(desc))
+        buf.putShort(lineNumbers.size)
+        lineNumbers.forEach { lineNumber ->
+            buf.putInt(lineNumber)
+        }
         return buf
     }
 }
