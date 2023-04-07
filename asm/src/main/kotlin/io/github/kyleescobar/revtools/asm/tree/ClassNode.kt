@@ -1,7 +1,9 @@
 package io.github.kyleescobar.revtools.asm.tree
 
+import io.github.kyleescobar.revtools.asm.attribute.OrigInfoAttribute
 import io.github.kyleescobar.revtools.asm.util.field
 import io.github.kyleescobar.revtools.asm.util.nullField
+import org.objectweb.asm.Attribute
 import org.objectweb.asm.ClassReader
 import org.objectweb.asm.ClassWriter
 import org.objectweb.asm.Type
@@ -12,6 +14,19 @@ internal fun ClassNode.init(pool: ClassPool) {
     this.pool = pool
     methods.forEach { it.init(this) }
     fields.forEach { it.init(this) }
+
+    /*
+     * Read attributes.
+     */
+    if(attrs == null) {
+        attrs = mutableListOf<Attribute>(origInfoAttr)
+    } else {
+        attrs.forEach { attr ->
+            when(attr.type) {
+                "OrigInfo" -> { origInfoAttr = attr as OrigInfoAttribute }
+            }
+        }
+    }
 }
 
 var ClassNode.pool: ClassPool by field()
@@ -20,6 +35,8 @@ var ClassNode.ignored: Boolean by field { false }
 var ClassNode.superClass: ClassNode? by nullField()
 val ClassNode.interfaceClasses: HashSet<ClassNode> by field { hashSetOf() }
 val ClassNode.children: HashSet<ClassNode> by field { hashSetOf() }
+
+var ClassNode.origInfoAttr: OrigInfoAttribute by field { OrigInfoAttribute(null, it.name, null) }
 
 val ClassNode.identifier get() = name
 val ClassNode.type get() = Type.getObjectType(name)
@@ -72,7 +89,7 @@ fun ClassNode.toByteArray(): ByteArray {
 
 fun ClassNode.fromByteArray(bytes: ByteArray): ClassNode {
     val reader = ClassReader(bytes)
-    reader.accept(this, 0)
+    reader.accept(this, ClassPool.REGISTERED_ATTRS, 0)
     return this
 }
 

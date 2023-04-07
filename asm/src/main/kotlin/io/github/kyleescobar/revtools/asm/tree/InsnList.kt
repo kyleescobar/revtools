@@ -82,3 +82,11 @@ fun InsnList.replace(old: AbstractInsnNode, replacement: AbstractInsnNode) {
     check(contains(old))
     set(old, replacement)
 }
+
+fun InsnList.iterate(block: AbstractInsnNode.(MutableListIterator<AbstractInsnNode>) -> Unit) {
+    val itr = this.iterator()
+    while(itr.hasNext()) {
+        val insn = itr.next()
+        insn.block(itr)
+    }
+}

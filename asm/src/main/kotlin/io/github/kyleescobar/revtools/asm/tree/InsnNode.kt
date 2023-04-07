@@ -15,7 +15,7 @@ import org.objectweb.asm.util.TraceMethodVisitor
 import java.io.PrintWriter
 import java.io.StringWriter
 
-private val PURE_OPCODES = setOf(
+val PURE_OPCODES = setOf(
     -1,
     Opcodes.NOP,
     Opcodes.ACONST_NULL,
@@ -120,7 +120,7 @@ private val PURE_OPCODES = setOf(
     Opcodes.NEW,
     Opcodes.INSTANCEOF
 )
-private val IMPURE_OPCODES = setOf(
+val IMPURE_OPCODES = setOf(
     Opcodes.IALOAD,
     Opcodes.LALOAD,
     Opcodes.FALOAD,
@@ -187,7 +187,7 @@ private val IMPURE_OPCODES = setOf(
     Opcodes.IFNULL,
     Opcodes.IFNONNULL
 )
-private val THROW_RETURN_OPCODES = listOf(
+val THROW_RETURN_OPCODES = listOf(
     Opcodes.IRETURN,
     Opcodes.LRETURN,
     Opcodes.FRETURN,

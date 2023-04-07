@@ -1,6 +1,10 @@
 package io.github.kyleescobar.revtools.deobfuscator
 
 import io.github.kyleescobar.revtools.asm.tree.ClassPool
+import io.github.kyleescobar.revtools.deobfuscator.asm.build
+import io.github.kyleescobar.revtools.deobfuscator.transformer.ControlFlowTransformer
+import io.github.kyleescobar.revtools.deobfuscator.transformer.DeadCodeTransformer
+import io.github.kyleescobar.revtools.deobfuscator.transformer.RuntimeExceptionTransformer
 import org.tinylog.kotlin.Logger
 import java.io.File
 import kotlin.reflect.full.createInstance
@@ -23,6 +27,9 @@ class Deobfuscator(
          * *NOTE* The order defined here is the order the transformers run in.
          * ===============================================
          */
+        register<RuntimeExceptionTransformer>()
+        register<DeadCodeTransformer>()
+        register<ControlFlowTransformer>()
 
         Logger.info("Registered ${transformers.size} bytecode transformers.")
     }
@@ -39,7 +46,8 @@ class Deobfuscator(
          * Initialization steps
          */
         pool = ClassPool.fromJar(inputJarFile)
-        pool.computeHierarchy()
+        pool.init()
+        pool.build()
         Logger.info("Loaded ${pool.classes.size} classes from input jar into class pool.")
 
         /*

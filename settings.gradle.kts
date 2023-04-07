@@ -6,3 +6,4 @@ rootProject.name = "revtools"
 
 include(":asm")
 include(":deobfuscator")
+include(":mapper")

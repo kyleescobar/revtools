@@ -1,5 +1,6 @@
 package io.github.kyleescobar.revtools.asm.tree
 
+import io.github.kyleescobar.revtools.asm.attribute.OrigInfoAttribute
 import org.objectweb.asm.tree.ClassNode
 import org.objectweb.asm.tree.MethodNode
 import java.io.File
@@ -72,7 +73,7 @@ class ClassPool {
         }
     }
 
-    fun computeHierarchy() {
+    fun init() {
         allClasses.forEach { cls ->
             cls.superClass = resolveClass(cls.superName)
             cls.superClass?.children?.add(cls)
@@ -84,6 +85,8 @@ class ClassPool {
     }
 
     companion object {
+
+        internal val REGISTERED_ATTRS = arrayOf(OrigInfoAttribute())
 
         private val IGNORED_PACKAGES = listOf(
             "org"
